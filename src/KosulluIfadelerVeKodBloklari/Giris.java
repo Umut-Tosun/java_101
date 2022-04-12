@@ -17,7 +17,7 @@ public class Giris {
             System.out.println("Giriş Başarılı");
         else
         {
-            if (password!="java101")
+            if (!password.equals("java101"))
             {
                 System.out.print("Şifreniz hatalı , sıfırlamak ister misiniz ? Yeni Şifeyi giriniz : ");
                 newPassword=input.next();
