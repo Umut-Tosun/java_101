@@ -40,7 +40,7 @@ public class Employee {
     void raiseSalary()
     {
         if (2021-hireYear<10)
-        {
+        {s
             raiseValue=(tempSalary*5)/100;
             salary+=raiseValue;
         }
