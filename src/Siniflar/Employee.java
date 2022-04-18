@@ -68,5 +68,6 @@ public class Employee {
         System.out.println("Vergi ve Bonuslar ile birlikte maaş :"+(tempSalary+bonusValue-taxValue));
         System.out.println("Toplam Maaş : "+salary);
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
     }
 }
