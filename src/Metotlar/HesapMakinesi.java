@@ -123,7 +123,7 @@ public class HesapMakinesi {
         System.out.print("Kısa Kenar giriniz :");
         int kisaKenar = scan.nextInt();
         System.out.print("Uzun Kenar degeri:");
-        int uzunekanar = scan.nextInt();
+        int uzunKenar = scan.nextInt();
 
         int alan = kisaKenar * uzunKenar;
         System.out.println("Alan : " + alan);
