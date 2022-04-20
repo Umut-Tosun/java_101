@@ -12,6 +12,7 @@ public class MineSweeper {
     int bomb=0;
     int sayac=0;
     int isWin;
+    int score=0;
 
     boolean gameStatus=true;
 
@@ -39,8 +40,7 @@ public class MineSweeper {
             sayac=0;
             bomb=0;
             if (isWin==0){
-                System.out.println("Oyunu Kazandınız !");
-                gameStatus=false;
+                gameOver(true);
                 break;
             }
             do {
@@ -58,11 +58,12 @@ public class MineSweeper {
                 for (int i = 0; i < matris.length; i++) {
                     for (int j = 0; j < matris[i].length; j++)
                         if (matris[i][j] == "*" && userInputRow == i && userInputCol == j&& gameStatus==true) {
-                            System.out.println("\nMayına Basıldı Oyun Bitti.\n");
-                            gameStatus=false;
+                            gameOver(false);
+                            break;
                         }
                         else if(sayac<1&& userInputRow == i && userInputCol == j)
                         {
+                             score+=10;
                              sayac++;
                              matris[i][j]=bombMap[i][j];
                              printMap(matris);
@@ -128,5 +129,19 @@ public class MineSweeper {
                     bombMap[r][c] = check_around_bomb(r,c);
                 }
         printMap(bombMap);
+    }
+    void gameOver(boolean status)
+    {
+        if (status==false)
+        {
+            System.out.println("Oyunu Kazandınız ! Toplam Puan : "+score);
+            gameStatus=false;
+        }
+        else
+        {
+            System.out.println("\nMayına Basıldı Oyun Bitti.\nScore : "+score);
+            gameStatus=false;
+        }
+
     }
 }
