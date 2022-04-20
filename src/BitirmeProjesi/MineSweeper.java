@@ -66,7 +66,7 @@ public class MineSweeper {
                              sayac++;
                              matris[i][j]=bombMap[i][j];
                              printMap(matris);
-                            isWin--;
+                             isWin--;
                         }
                     }
                 }
@@ -113,19 +113,17 @@ public class MineSweeper {
     public String  check_around_bomb(int x, int y)
     {
         int bomb = 0;
-        if (x>0&&x<rowNumber&&y>0&&y<colNumber)
+        if (x>=0&&x<rowNumber&&y>=0&&y<colNumber)
          for (int r = x - 1; r <= x + 1; r++)
             for (int c = y - 1; c <= y + 1; c++)
-                if (r >= 0 && c >= 0 && !(r == x && c == y) && r <= rowNumber && y <= colNumber)
+                if (r >= 0 && c >= 0 && !(r == x && c == y) &&r < bombMap.length && c < bombMap[0].length)
                     if (bombMap[r][c] == "*") bomb++;
-
-        String s=""+bomb;
-        return s;
+        return ""+bomb;
     }
     void modifieMap()
     {
-        for (int r=1; r< bombMap.length-1;r++)
-            for (int c=1 ; c<bombMap[r].length-1;c++)
+        for (int r=0; r< bombMap.length;r++)
+            for (int c=0 ; c<bombMap[r].length;c++)
                 if (bombMap[r][c]!="*") {
                     bombMap[r][c] = check_around_bomb(r,c);
                 }
