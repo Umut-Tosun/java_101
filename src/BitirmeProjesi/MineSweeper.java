@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class MineSweeper {
+    public static final String ANSI_KIRMIZI = "\u001B[31m";
+    public static final String ANSI_BEYAZ = "\u001B[37m";
     int rowNumber;
     int colNumber;
     int mineNumber;
@@ -80,7 +82,8 @@ public class MineSweeper {
     {
         for (int i = 0; i < x.length; i++) {
             for (int j = 0; j < x[i].length; j++) {
-                System.out.print(x[i][j] + "\t");
+                if (x[i][j]!="*"&&x[i][j]!="-"&&x[i][j]!="0") System.out.print(ANSI_KIRMIZI +x[i][j]+"\t");
+                else System.out.print(ANSI_BEYAZ +x[i][j]+"\t");
             }
             System.out.println();
         }
