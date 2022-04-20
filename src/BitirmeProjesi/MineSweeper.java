@@ -65,11 +65,11 @@ public class MineSweeper {
                         }
                         else if(sayac<1&& userInputRow == i && userInputCol == j)
                         {
+                             isWin--;
                              score+=10;
                              sayac++;
                              matris[i][j]=bombMap[i][j];
                              printMap(matris);
-                             isWin--;
                         }
                     }
                 }
@@ -84,6 +84,7 @@ public class MineSweeper {
             for (int j = 0; j < x[i].length; j++) {
                 if (x[i][j]!="*"&&x[i][j]!="-"&&x[i][j]!="0") System.out.print(ANSI_KIRMIZI +x[i][j]+"\t");
                 else System.out.print(ANSI_BEYAZ +x[i][j]+"\t");
+                System.out.print(ANSI_BEYAZ+"");
             }
             System.out.println();
         }
@@ -135,12 +136,12 @@ public class MineSweeper {
     }
     void gameOver(boolean status)
     {
-        if (status==false)
+        if (status==true)
         {
             System.out.println("Oyunu Kazandınız ! Toplam Puan : "+score);
             gameStatus=false;
         }
-        else
+        else if (status==false)
         {
             System.out.println("\nMayına Basıldı Oyun Bitti.\nScore : "+score);
             gameStatus=false;
