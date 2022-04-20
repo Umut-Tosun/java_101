@@ -64,7 +64,8 @@ public class MineSweeper {
                         else if(sayac<1&& userInputRow == i && userInputCol == j)
                         {
                              sayac++;
-                             //islemler
+                             matris[i][j]=bombMap[i][j];
+                             printMap(matris);
                             isWin--;
                         }
                     }

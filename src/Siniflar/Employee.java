@@ -40,7 +40,7 @@ public class Employee {
     void raiseSalary()
     {
         if (2021-hireYear<10)
-        {s
+        {
             raiseValue=(tempSalary*5)/100;
             salary+=raiseValue;
         }
@@ -67,7 +67,6 @@ public class Employee {
         System.out.println("Maaş Artışı : "+(salary-tempSalary));
         System.out.println("Vergi ve Bonuslar ile birlikte maaş :"+(tempSalary+bonusValue-taxValue));
         System.out.println("Toplam Maaş : "+salary);
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 }
