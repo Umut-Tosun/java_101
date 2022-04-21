@@ -4,8 +4,8 @@ import java.net.PortUnreachableException;
 import java.util.Random;
 import java.util.Scanner;
 
-public class MineSweeper {
 
+public class MineSweeper {
     public static final String ANSI_CLS = "\u001b[2J";
     public static final String ANSI_HOME = "\u001b[H";
     public static final String ANSI_BOLD = "\u001b[1m";
@@ -58,11 +58,11 @@ public class MineSweeper {
             } while (userInputCol < 1 || userInputCol > colNumber);
             userInputCol--;
             modifieMap();
-            check_bomb(userInputRow, userInputCol);
+            check_isZero(userInputRow, userInputCol);
             if (bombMap[userInputRow][userInputCol].equals("*") && gameStatus) {
                 gameOver(false);
             } else if (matris[userInputRow][userInputCol].equals("-")) {
-                check_bomb(userInputRow, userInputCol);
+                check_isZero(userInputRow, userInputCol);
 
             }
             isWin--;
@@ -73,7 +73,7 @@ public class MineSweeper {
         }
     }
 
-    public void check_bomb(int r, int y)
+    public void check_isZero(int r, int y)
     {
         matris[r][y] = bombMap[r][y];
         if (bombMap[r][y].equals(" ")) {
@@ -84,7 +84,7 @@ public class MineSweeper {
                 if (x[0] >= 0 && x[1] >= 0 && x[0] < rowNumber && x[1] < colNumber)
                     if (!bombMap[x[0]][x[1]].equals("*") && matris[x[0]][x[1]].equals("-"))
                     {
-                        check_bomb(x[0], x[1]);
+                        check_isZero(x[0], x[1]);
                         isWin--;
                     }
             }
@@ -173,11 +173,10 @@ public class MineSweeper {
         System.out.print(ANSI_KIRMIZI+"Tekrardan oynamak için [1] çıkmak için [0]  : ");
         int isFinish = input.nextInt();
         do {
+            if (isFinish==1)ms.run();
+            else if(isFinish==0)System.exit(0);
             System.out.print(ANSI_KIRMIZI+"Tekrardan oynamak için [1] çıkmak için [0]  : ");
             isFinish = input.nextInt();
-
-            if (isFinish==1)ms.run();
-            else if(isFinish==0)ms.run();
 
         }while (isFinish!=1||isFinish!=0);
     }
