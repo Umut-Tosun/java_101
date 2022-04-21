@@ -1,151 +1,184 @@
 package BitirmeProjesi;
 
+import java.net.PortUnreachableException;
 import java.util.Random;
 import java.util.Scanner;
 
 public class MineSweeper {
+
+    public static final String ANSI_CLS = "\u001b[2J";
+    public static final String ANSI_HOME = "\u001b[H";
+    public static final String ANSI_BOLD = "\u001b[1m";
+    public static final String ANSI_AT55 = "\u001b[10;10H";
+    public static final String ANSI_REVERSEON = "\u001b[7m";
+    public static final String ANSI_NORMAL = "\u001b[0m";
+    public static final String ANSI_WHITEONBLUE = "\u001b[37;44m";
     public static final String ANSI_KIRMIZI = "\u001B[31m";
     public static final String ANSI_BEYAZ = "\u001B[37m";
-    int rowNumber;
-    int colNumber;
-    int mineNumber;
-    int userInputRow;
-    int userInputCol;
-    int bomb=0;
-    int sayac=0;
-    int isWin;
-    int score=0;
 
-    boolean gameStatus=true;
-
-    String [][] matris;
-    String [][] tempMatris;
-    String [][] bombMap;
-
-    Random r=new Random();
+    Random r = new Random();
     Scanner input = new Scanner(System.in);
+
+    int rowNumber, colNumber, mineNumber, userInputRow, userInputCol, isWin, bomb = 0, score = 0;
+
+    boolean gameStatus = true;
+
+    String[][] matris;
+    String[][] tempMatris;
+    String[][] bombMap;
 
     public MineSweeper(int rowNumber, int colNumber)
     {
         this.rowNumber = rowNumber;
         this.colNumber = colNumber;
-        this.bombMap=new String[rowNumber][colNumber];
-        this.matris=new String[rowNumber][colNumber];
-        this.tempMatris=new String[rowNumber][colNumber];
-        mineNumber=(rowNumber*colNumber)/4;
-        isWin=(rowNumber*colNumber)-mineNumber;
+        this.bombMap = new String[rowNumber][colNumber];
+        this.matris = new String[rowNumber][colNumber];
+        this.tempMatris = new String[rowNumber][colNumber];
+        mineNumber = (rowNumber * colNumber) / 3;
+        isWin = (rowNumber * colNumber) - mineNumber;
     }
-    void run()
+
+    public void run()
     {
         startgame();
-        while (gameStatus) {
-            sayac=0;
-            bomb=0;
-            if (isWin==0){
+        while (gameStatus)
+        {
+            if (isWin == 0) {
                 gameOver(true);
                 break;
             }
             do {
                 System.out.print("Satır Giriniz : ");
                 userInputRow = input.nextInt();
-            }while (userInputRow<1||userInputRow>rowNumber);
+            } while (userInputRow < 1 || userInputRow > rowNumber);
             userInputRow--;
             do {
                 System.out.print("Sutün Giriniz : ");
                 userInputCol = input.nextInt();
-            }while (userInputCol<1||userInputCol>colNumber);
+            } while (userInputCol < 1 || userInputCol > colNumber);
             userInputCol--;
+            modifieMap();
+            check_bomb(userInputRow, userInputCol);
+            if (bombMap[userInputRow][userInputCol].equals("*") && gameStatus) {
+                gameOver(false);
+            } else if (matris[userInputRow][userInputCol].equals("-")) {
+                check_bomb(userInputRow, userInputCol);
 
-            if ((rowNumber > userInputRow) && (colNumber > userInputCol) && (userInputRow >= 0) && (userInputCol >= 0)) {
-                for (int i = 0; i < matris.length; i++) {
-                    for (int j = 0; j < matris[i].length; j++)
-                        if (matris[i][j] == "*" && userInputRow == i && userInputCol == j&& gameStatus==true) {
-                            gameOver(false);
-                            break;
-                        }
-                        else if(sayac<1&& userInputRow == i && userInputCol == j)
-                        {
-                             isWin--;
-                             score+=10;
-                             sayac++;
-                             matris[i][j]=bombMap[i][j];
-                             printMap(matris);
-                        }
+            }
+            isWin--;
+            System.out.println("isWin : "+isWin);
+            score += 10;
+            printMap(matris);
+
+        }
+    }
+
+    public void check_bomb(int r, int y)
+    {
+        matris[r][y] = bombMap[r][y];
+        if (bombMap[r][y].equals(" ")) {
+
+            int[][] a = {{r - 1, y}, {r, y - 1}, {r, y + 1}, {r + 1, y}};
+
+            for (int[] x : a) {
+                if (x[0] >= 0 && x[1] >= 0 && x[0] < rowNumber && x[1] < colNumber)
+                    if (!bombMap[x[0]][x[1]].equals("*") && matris[x[0]][x[1]].equals("-"))
+                    {
+                        check_bomb(x[0], x[1]);
+                        isWin--;
                     }
-                }
-            else {
-                System.out.println("\nGeçersiz Kordinat\n");
             }
         }
     }
-    void printMap(String x[][])
+
+    public void printMap(String x[][])
     {
         for (int i = 0; i < x.length; i++) {
             for (int j = 0; j < x[i].length; j++) {
-                if (x[i][j]!="*"&&x[i][j]!="-"&&x[i][j]!="0") System.out.print(ANSI_KIRMIZI +x[i][j]+"\t");
-                else System.out.print(ANSI_BEYAZ +x[i][j]+"\t");
-                System.out.print(ANSI_BEYAZ+"");
+                if (!x[i][j].equals("*") && !x[i][j].equals("-") && !x[i][j].equals("0")) System.out.print(ANSI_KIRMIZI + x[i][j] + "\t");
+                else System.out.print(ANSI_BEYAZ + x[i][j] + "\t");
+                System.out.print(ANSI_BEYAZ + "");
             }
             System.out.println();
         }
     }
-    void startgame()
+
+    public void startgame()
     {
         System.out.println("Mayınların Konumu");
-        for (int i=0;i<mineNumber;)
-        {
-            int a=r.nextInt(0,rowNumber);
-            int b=r.nextInt(0,colNumber);
+        for (int i = 0; i < mineNumber; ) {
+            int a = r.nextInt(0, rowNumber);
+            int b = r.nextInt(0, colNumber);
 
-            if (matris[a][b]==null) {
-                matris[a][b] = "*";
+            if (bombMap[a][b] == null) {
                 bombMap[a][b] = "*";
                 i++;
             }
         }
-        for (int i=0;i<matris.length;i++)
-            for (int j=0;j<matris[i].length;j++) {
-                tempMatris[i][j]="-";
-                if (matris[i][j]==null) matris[i][j]="-";
-                if (bombMap[i][j]==null) bombMap[i][j]="-";
+        for (int i = 0; i < matris.length; i++)
+            for (int j = 0; j < matris[i].length; j++) {
+                tempMatris[i][j] = "-";
+                if (matris[i][j] == null) matris[i][j] = "-";
+                if (bombMap[i][j] == null) bombMap[i][j] = "-";
             }
         printMap(bombMap);
         System.out.println("======================================================");
-        System.out.println("Mayın Tarlası Oyununa Hoşgeldiniz !");
         modifieMap();
-        System.out.println("======================================================");
+        System.out.println(ANSI_KIRMIZI+"Mayın Tarlası Oyununa Hoşgeldiniz !");
+        System.out.println("Yerleştirilen Bomba Sayısı : "+mineNumber);
+        printMap(tempMatris);
+        System.out.println(ANSI_BEYAZ+"======================================================");
     }
-    public String  check_around_bomb(int x, int y)
+
+    public String check_around_bomb(int x, int y)
     {
         int bomb = 0;
-        if (x>=0&&x<rowNumber&&y>=0&&y<colNumber)
-         for (int r = x - 1; r <= x + 1; r++)
-            for (int c = y - 1; c <= y + 1; c++)
-                if (r >= 0 && c >= 0 && !(r == x && c == y) &&r < bombMap.length && c < bombMap[0].length)
-                    if (bombMap[r][c] == "*") bomb++;
-        return ""+bomb;
+        if (x >= 0 && x < rowNumber && y >= 0 && y < colNumber)
+            for (int r = x - 1; r <= x + 1; r++)
+                for (int c = y - 1; c <= y + 1; c++)
+                    if (r >= 0 && c >= 0 && !(r == x && c == y) && r < bombMap.length && c < bombMap[0].length)
+                        if (bombMap[r][c].equals("*")) bomb++;
+
+        return Integer.toString(bomb);
     }
-    void modifieMap()
+
+    public void modifieMap()
     {
-        for (int r=0; r< bombMap.length;r++)
-            for (int c=0 ; c<bombMap[r].length;c++)
-                if (bombMap[r][c]!="*") {
-                    bombMap[r][c] = check_around_bomb(r,c);
+        int c, r;
+        for (r = 0; r < bombMap.length; r++)
+            for (c = 0; c < bombMap[r].length; c++)
+                if (!bombMap[r][c].equals("*")) {
+                    String b = check_around_bomb(r, c);
+                    if (b.equals("0")) bombMap[r][c] = " ";
+                    else bombMap[r][c] = b;
                 }
-        printMap(bombMap);
     }
-    void gameOver(boolean status)
+
+    public void gameOver(boolean status)
     {
-        if (status==true)
-        {
-            System.out.println("Oyunu Kazandınız ! Toplam Puan : "+score);
-            gameStatus=false;
-        }
-        else if (status==false)
-        {
-            System.out.println("\nMayına Basıldı Oyun Bitti.\nScore : "+score);
-            gameStatus=false;
+        if (status){
+            System.out.println(ANSI_KIRMIZI+"Oyunu Kazandınız ! Toplam Puan : " + score);
+            gameStatus = false;
+            restartGame();
+        } else {
+            System.out.println(ANSI_KIRMIZI+"\nMayına Basıldı Oyun Bitti.\nScore : " + score);
+            gameStatus = false;
+            restartGame();
         }
 
+    }
+    public void restartGame()
+    {
+        MineSweeper ms=new MineSweeper(3,3);
+        System.out.print(ANSI_KIRMIZI+"Tekrardan oynamak için [1] çıkmak için [0]  : ");
+        int isFinish = input.nextInt();
+        do {
+            System.out.print(ANSI_KIRMIZI+"Tekrardan oynamak için [1] çıkmak için [0]  : ");
+            isFinish = input.nextInt();
+
+            if (isFinish==1)ms.run();
+            else if(isFinish==0)ms.run();
+
+        }while (isFinish!=1||isFinish!=0);
     }
 }
